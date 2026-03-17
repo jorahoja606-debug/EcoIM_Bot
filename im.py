@@ -1,4 +1,7 @@
 import asyncio
+import os
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import logging
 import aiosqlite
 import qrcode
@@ -17,7 +20,7 @@ from aiogram.types import (
 )
 
 # --- SOZLAMALAR ---
-API_TOKEN = "8623925872:AAGmtzyPWeX4qzZg9GHeTVe4O-h_ZJs6os0"
+API_TOKEN = "8623925872:AAGlfY2vXKgo2GrF3_XHGq_mQgFVNF0KJgg"
 ADMIN_IDS = [6396886650, 8274938812, 8524520506]
 DB_PATH = "ecoim_v8.db"
 
@@ -247,5 +250,26 @@ async def main():
     await init_db()
     await dp.start_polling(bot)
 
-if _name_ == "_main_":
+# Render uchun portni band qilib turuvchi funksiya
+def run_dummy_server():
+    class SimpleHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Bot is running!")
+
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(('0.0.0.0', port), SimpleHandler)
+    print(f"Server {port} portda ishga tushdi...")
+    server.serve_forever()
+
+async def main():
+    await init_db()
+    # Port serverni alohida oqimda yurgizish
+    threading.Thread(target=run_dummy_server, daemon=True).start()
+    print('Bot ishga tushdi!')
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
     asyncio.run(main())
+
