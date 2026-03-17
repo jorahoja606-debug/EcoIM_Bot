@@ -59,7 +59,7 @@ async def init_db():
 # --- KLAVIATURALAR ---
 def main_menu(uid):
     kb = [
-        [KeyboardButton(text="➕ Chiqindi topshirish")],
+        [KeyboardButton(tex8t="➕ Chiqindi topshirish")],
         [KeyboardButton(text="👤 Profilim"), KeyboardButton(text="🏆 Reyting")],
         [KeyboardButton(text="🏫 Sinfiy Reyting"), KeyboardButton(text="⚙️ Sozlamalar")],
     ]
@@ -247,5 +247,5 @@ async def main():
     await init_db()
     await dp.start_polling(bot)
 
-if name == "main":
+if _name_ == "_main_":
     asyncio.run(main())
